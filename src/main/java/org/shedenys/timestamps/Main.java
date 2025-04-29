@@ -8,9 +8,20 @@ import java.nio.file.*;
 public class Main {
 
     public static void main(String[] args) {
-        Path currentDir = Paths.get(System.getProperty("user.dir"));
-        Path inputDir = currentDir.resolve("input");
+
+        Path inputDir;
+        if (args.length == 0) {
+            inputDir = getDefaultInputDir();
+        } else {
+            inputDir = Paths.get(args[0]);
+        }
 
         (new RenameFilesCommand(new Directory(inputDir))).execute();
+    }
+
+    private static Path getDefaultInputDir() {
+        Path currentDir = Paths.get(System.getProperty("user.dir"));
+
+        return currentDir.resolve("input");
     }
 }
