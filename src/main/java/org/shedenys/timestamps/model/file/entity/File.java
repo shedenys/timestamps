@@ -12,8 +12,19 @@ import java.util.Date;
  * <p>
  * This class is commonly used in combination with metadata extraction and file
  * creation utilities to manage and organize files based on their attributes.
+ *
+ * @param path      The file system path associated with this file. This path specifies the location of the file
+ *                  within the file system and is utilized for operations such as resolving sibling paths
+ *                  and generating full paths using attributes of this class.
+ * @param date      Represents the creation or associated timestamp of the file.
+ *                  This attribute is used for date-specific operations, such as
+ *                  generating file names and paths that incorporate a timestamp.
+ * @param extension Represents the file extension of this file. The extension is used to identify
+ *                  the type or format of the file (e.g., "txt", "jpg", "mp4"). It is commonly
+ *                  appended to file names or paths to denote the file's type and is utilized
+ *                  when generating timestamp-based file names or paths.
  */
-public class File {
+public record File(Path path, Date date, String extension) {
 
     public static final String MIME_TYPE_VIDEO_QUICKTIME = "video/quicktime";
     public static final String MIME_TYPE_IMAGE_HEIF = "image/heif";
@@ -35,68 +46,6 @@ public class File {
      * timestamp information based on the provided {@code date} attribute.
      */
     private static final String TIMESTAMP_DATE_PATTERN = "yyyy-MM-dd-HH-mm-ss";
-
-    /**
-     * The file system path associated with this file. This path specifies the location of the file
-     * within the file system and is utilized for operations such as resolving sibling paths
-     * and generating full paths using attributes of this class.
-     */
-    private final Path path;
-
-    /**
-     * Represents the creation or associated timestamp of the file.
-     * This attribute is used for date-specific operations, such as
-     * generating file names and paths that incorporate a timestamp.
-     */
-    private final Date date;
-
-    /**
-     * Represents the file extension of this file. The extension is used to identify
-     * the type or format of the file (e.g., "txt", "jpg", "mp4"). It is commonly
-     * appended to file names or paths to denote the file's type and is utilized
-     * when generating timestamp-based file names or paths.
-     */
-    private final String extension;
-
-    /**
-     * Constructs a {@code File} instance with the specified path, date, and file extension.
-     *
-     * @param path      the file system path associated with this file
-     * @param date      the creation or associated timestamp of the file
-     * @param extension the file extension, representing the file's type or format (e.g., "txt", "jpg")
-     */
-    public File(Path path, Date date, String extension) {
-        this.path = path;
-        this.date = date;
-        this.extension = extension;
-    }
-
-    /**
-     * Retrieves the file system path associated with the current file.
-     *
-     * @return the {@code Path} representing the file's location in the file system
-     */
-    public Path getPath() {
-        return path;
-    }
-
-    /**
-     * Retrieves the date associated with the file.
-     *
-     * @return the {@code Date} representing the creation or associated timestamp of the file
-     */
-    public Date getDate() {
-        return date;
-    }
-
-    /**
-     * Retrieves the file extension associated with the current file.
-     *
-     * @return the file extension as a {@code String}, representing the file's type or format (e.g., "txt", "jpg")
-     */
-    public String getExtension() {
-        return extension;
-    }
 
     /**
      * Creates a file name based on the associated timestamp and file extension.

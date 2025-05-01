@@ -42,7 +42,7 @@ public class RenameCommand implements CommandInterface {
      */
     @Override
     public void execute() {
-        rename(file.getPath(), file.createTimestampBasedFilePath());
+        rename(file.path(), file.createTimestampBasedFilePath());
     }
 
     /**
