@@ -1,12 +1,20 @@
 # timestamps
-The app that renames media files based on their creation data.
+The app that renames media files based on their creation data. You can run the app using Java installed on your local machine or use any pre-built package for Mac.
+
+## Installation
+Skip this if you like to run app from the source code.
+
+### macOS package
+#### Install package to your system
+Open `Timestamps-1.0.pkg` file from `dist` directory and follow the instructions.
+#### Create symlink
+```bash
+sudo ln -s "/Applications/Timestamps.app/Contents/MacOS/timestamps" /usr/local/bin/timestamps
+```
 
 ## Usage
 
-You can run app using Java installed on your local machine or use any pre-built package for Windows or Mac.
-
-
-### Running the app from sourcecode using Java
+### Run the app from sourcecode using Java and Maven
 
 > **Note:** Be sure Java and Maven are installed on your machine by running in your terminal.
 > 
@@ -37,18 +45,34 @@ You can run app using Java installed on your local machine or use any pre-built 
 ```bash
 mvn package
 ```
-#### Go to ```target``` folder
+#### Go to `target` folder
 ```bash
 cd target
 ```
-By default, the app is looking for the ```input``` directory with files to rename.
-You can create the directory and put your files there or specify the path to the directory with files by the first argument.
+#### Run the app to rename files
+> **Note:** By default, the app is looking for the `input` directory with files to rename.
+You can create the directory and put your files there or specify the path to the directory with files by the first argument. 
 
-#### Run app to rename files from inner ```input``` directory
+Run the app to rename files from inner `input` directory:
 ```bash
-java -jar timestamps-1.0-SNAPSHOT.jar <absolute_path>
+java -jar timestamps-1.0-SNAPSHOT.jar
 ```
-Example:
+Run the app to rename files from `/Users/someuser/direcotryname` directory:
 ```bash
 java -jar timestamps-1.0-SNAPSHOT.jar /Users/someuser/direcotryname
+```
+
+### Run the app on macOS from the installed package
+
+Run the app to rename files from `/Users/someuser/direcotryname` directory:
+```bash
+timestamps /Users/someuser/direcotryname
+```
+
+## Removal
+
+### macOS package
+Delete manually the app `Timestamps` from the `Applications` folder and delete the symlink by running the command:
+```bash
+sudo ln -s "/Applications/Timestamps.app/Contents/MacOS/timestamps" /usr/local/bin/timestamps
 ```
