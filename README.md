@@ -74,5 +74,5 @@ timestamps /Users/someuser/directoryname
 ### macOS package
 Delete manually the app `Timestamps` from the `Applications` folder and delete the symlink by running the command:
 ```bash
-sudo ln -s "/Applications/Timestamps.app/Contents/MacOS/timestamps" /usr/local/bin/timestamps
+sudo rm /usr/local/bin/timestamps
 ```
