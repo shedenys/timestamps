@@ -50,23 +50,23 @@ mvn package
 cd target
 ```
 #### Run the app to rename files
-> **Note:** By default, the app is looking for the `input` directory with files to rename.
-You can create the directory and put your files there or specify the path to the directory with files by the first argument. 
-
-Run the app to rename files from inner `input` directory:
+Run command with specifying the path to the directory with files as an argument:
 ```bash
-java -jar timestamps-1.0-SNAPSHOT.jar
+java -jar timestamps-1.0-SNAPSHOT.jar <directory_path>
 ```
-Run the app to rename files from `/Users/someuser/direcotryname` directory:
+Example to rename files from `/Users/someuser/direcotryname` directory:
 ```bash
-java -jar timestamps-1.0-SNAPSHOT.jar /Users/someuser/direcotryname
+java -jar timestamps-1.0-SNAPSHOT.jar /Users/someuser/directoryname
 ```
 
 ### Run the app on macOS from the installed package
-
-Run the app to rename files from `/Users/someuser/direcotryname` directory:
+Run command with specifying the path to the directory with files as an argument:
 ```bash
-timestamps /Users/someuser/direcotryname
+timestamps <directory_path>
+```
+Example to rename files from `/Users/someuser/direcotryname` directory:
+```bash
+timestamps /Users/someuser/directoryname
 ```
 
 ## Removal

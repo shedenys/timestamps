@@ -26,7 +26,9 @@ public class Main {
 
         Path inputDir;
         if (args.length == 0) {
-            inputDir = getDefaultInputDir();
+            System.err.println("Error. Input directory not specified");
+
+            return;
         } else {
             inputDir = Paths.get(args[0]);
         }
@@ -40,15 +42,5 @@ public class Main {
                 System.err.println(e.getMessage());
             }
         }
-    }
-
-    /**
-     * Retrieves the default input directory path, which is a directory named "input"
-     * relative to the current working directory.
-     */
-    private static Path getDefaultInputDir() {
-        Path currentDir = Paths.get(System.getProperty("user.dir"));
-
-        return currentDir.resolve("input");
     }
 }
