@@ -1,6 +1,7 @@
 package org.shedenys.timestamps.model.directory.usecase;
 
 import org.shedenys.timestamps.CommandInterface;
+import org.shedenys.timestamps.Config;
 import org.shedenys.timestamps.model.directory.entity.Directory;
 import org.shedenys.timestamps.model.file.entity.File;
 import org.shedenys.timestamps.model.file.factory.metadata.FileFactory;
@@ -34,12 +35,16 @@ public class RenameFilesCommand implements CommandInterface {
                             File file = (new FileFactory()).create(path, inputStream);
                             (new RenameCommand(file)).execute();
                         } catch (Exception e) {
-                            System.err.println("Failed to read metadata for: " + path);
-                            e.printStackTrace();
+                            System.err.println("Skipped. Failed to read metadata for: " + path);
+                            if (Config.isDevelopment()) {
+                                e.printStackTrace();
+                            }
                         }
                     });
         } catch (IOException e) {
-            e.printStackTrace();
+            if (Config.isDevelopment()) {
+                e.printStackTrace();
+            }
         }
     }
 

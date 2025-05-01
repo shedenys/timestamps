@@ -23,7 +23,7 @@ public class RenameCommand implements CommandInterface {
     private void rename(Path path, Path newPath) {
         try {
             Files.move(path, newPath, StandardCopyOption.REPLACE_EXISTING);
-            System.out.println("Renamed: " + path.getFileName() + " -> " + newPath.getFileName());
+            System.out.println("Renamed. " + path.getFileName() + " -> " + newPath.getFileName());
         } catch (Exception e) {
             System.err.println("Failed to rename " + path.getFileName() + ": " + e.getMessage());
         }
