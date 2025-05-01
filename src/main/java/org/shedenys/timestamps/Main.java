@@ -31,7 +31,15 @@ public class Main {
             inputDir = Paths.get(args[0]);
         }
 
-        (new RenameFilesCommand(new Directory(inputDir))).execute();
+        try {
+            (new RenameFilesCommand(new Directory(inputDir))).execute();
+        } catch (NoSuchFileException e) {
+            if (Config.isDevelopment()) {
+                e.printStackTrace();
+            } else {
+                System.err.println(e.getMessage());
+            }
+        }
     }
 
     /**

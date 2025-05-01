@@ -1,5 +1,7 @@
 package org.shedenys.timestamps.model.directory.entity;
 
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 
 /**
@@ -22,7 +24,10 @@ public class Directory {
      *             This path is used to identify and perform operations on the
      *             corresponding directory.
      */
-    public Directory(Path path) {
+    public Directory(Path path) throws NoSuchFileException {
+        if (!exists(path)) {
+            throw new NoSuchFileException("Directory does not exist: " + path.toString());
+        }
         this.path = path;
     }
 
@@ -33,5 +38,15 @@ public class Directory {
      */
     public Path getPath() {
         return path;
+    }
+
+    /**
+     * Checks whether the specified {@link Path} exists in the file system.
+     *
+     * @param path the {@link Path} to check for existence.
+     * @return {@code true} if the path exists, {@code false} otherwise.
+     */
+    private static boolean exists(Path path) {
+        return Files.exists(path);
     }
 }

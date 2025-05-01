@@ -82,6 +82,7 @@ public class RenameFilesCommand implements CommandInterface {
                         }
                     });
         } catch (IOException e) {
+            System.err.println("Input/output error. Skipping files in " + dir.getPath() + "...");
             if (Config.isDevelopment()) {
                 e.printStackTrace();
             }
