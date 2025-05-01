@@ -7,6 +7,16 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * A command implementation for renaming a file. This class defines the
+ * behavior for renaming a file based on a timestamp-based naming convention.
+ * It uses the {@link File} entity to determine the current path and the
+ * new renamed path.
+ * <p>
+ * This class adheres to the Command design pattern and implements the
+ * {@link CommandInterface}, which encapsulates the rename operation
+ * to be executed when called.
+ */
 public class RenameCommand implements CommandInterface {
 
     private final File file;

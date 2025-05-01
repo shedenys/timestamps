@@ -5,6 +5,11 @@ import org.shedenys.timestamps.model.directory.usecase.RenameFilesCommand;
 
 import java.nio.file.*;
 
+/**
+ * Main class for the application that handles file renaming based on metadata.
+ * This class provides functionality to determine the input directory and
+ * execute the renaming operation on the files within the specified directory.
+ */
 public class Main {
 
     public static void main(String[] args) {

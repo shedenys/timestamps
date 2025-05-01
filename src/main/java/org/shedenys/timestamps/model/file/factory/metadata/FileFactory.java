@@ -17,8 +17,24 @@ import java.util.function.Supplier;
 import static org.shedenys.timestamps.model.file.entity.File.MIME_TYPE_IMAGE_HEIF;
 import static org.shedenys.timestamps.model.file.entity.File.MIME_TYPE_VIDEO_QUICKTIME;
 
+/**
+ * Factory class responsible for creating {@link File} instances.
+ * <p>
+ * This class implements the {@link FileFactoryInterface} and provides
+ * functionality to create file instances based on metadata extracted
+ * from an input stream. The creation process supports specific file
+ * types, such as QuickTime and HEIF files, through the use of
+ * dedicated creators.
+ * <p>
+ * The factory determines the appropriate creator to use based on the
+ * MIME type present in the provided metadata. If the MIME type is not
+ * supported, an exception is thrown.
+ */
 public class FileFactory implements FileFactoryInterface {
 
+    /**
+     * The map of mimetypes to their file instance creators.
+     */
     private static final Map<String, Supplier<AbstractCreator>> creators = Map.of(
             MIME_TYPE_VIDEO_QUICKTIME, QuickTimeFileCreator::new,
             MIME_TYPE_IMAGE_HEIF, HeifFileCreator::new

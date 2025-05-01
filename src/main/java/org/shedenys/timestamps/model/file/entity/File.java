@@ -6,7 +6,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * The file entity.
+ * Represents a file with specific attributes such as path, creation date,
+ * and file extension. This class provides methods for generating a timestamp-based
+ * file name or file path based on the contained attributes.
+ * <p>
+ * This class is commonly used in combination with metadata extraction and file
+ * creation utilities to manage and organize files based on their attributes.
  */
 public class File {
 

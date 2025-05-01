@@ -13,6 +13,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
+/**
+ * A command implementation designed to rename files within a given directory.
+ * This class processes files in the specified directory, extracting metadata
+ * and renaming them using a timestamp-based naming convention.
+ * <p>
+ * This class implements the {@link CommandInterface} and adheres to the
+ * Command design pattern, encapsulating the rename operation to be executed
+ * when called.
+ * <p>
+ * The renaming operation involves:
+ * - Listing all regular files in the specified directory.
+ * - Processing each file to extract metadata using a {@link FileFactory}.
+ * - Renaming the file using the extracted metadata with the help of a {@link RenameCommand}.
+ * <p>
+ * Errors during file processing or renaming are logged. If the application is
+ * in development mode (determined via {@link Config#isDevelopment()}), additional
+ * error details are printed to the console.
+ */
 public class RenameFilesCommand implements CommandInterface {
 
     private final Directory dir;
