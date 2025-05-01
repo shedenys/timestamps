@@ -12,6 +12,16 @@ import java.nio.file.*;
  */
 public class Main {
 
+    /**
+     * The main entry point of the application.
+     * This method determines the input directory for the files to be processed
+     * and initiates the renaming operation by executing a {@link RenameFilesCommand}.
+     *
+     * @param args the command-line arguments where the first argument specifies
+     *             the path to the input directory. If no arguments are provided,
+     *             a default directory named "input" relative to the current working
+     *             directory is used.
+     */
     public static void main(String[] args) {
 
         Path inputDir;
@@ -24,6 +34,10 @@ public class Main {
         (new RenameFilesCommand(new Directory(inputDir))).execute();
     }
 
+    /**
+     * Retrieves the default input directory path, which is a directory named "input"
+     * relative to the current working directory.
+     */
     private static Path getDefaultInputDir() {
         Path currentDir = Paths.get(System.getProperty("user.dir"));
 

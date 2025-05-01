@@ -19,6 +19,16 @@ import java.util.Date;
  */
 public abstract class AbstractCreator {
 
+    /**
+     * Creates a {@link File} instance using the provided {@link Path} and {@link Metadata}.
+     * This method combines the specified file path, a date retrieved from the metadata,
+     * and the file extension extracted from the metadata to construct the {@link File}.
+     *
+     * @param path     the file path to be associated with the {@link File} instance
+     * @param metadata the metadata containing information such as the file's creation date
+     *                 and file extension
+     * @return a {@link File} instance created using the provided path and metadata
+     */
     public File create(Path path, Metadata metadata) {
         return new File(
                 path,
@@ -27,8 +37,24 @@ public abstract class AbstractCreator {
         );
     }
 
+    /**
+     * Retrieves the file creation date from the provided metadata.
+     * This method must be implemented by subclasses to extract the
+     * appropriate date information specific to their metadata format.
+     *
+     * @param metadata the metadata from which the creation date is to be extracted
+     * @return the extracted creation date as a {@code Date} object, or {@code null} if no valid date is found
+     */
     protected abstract Date getFileDate(Metadata metadata);
 
+    /**
+     * Extracts the file extension from the specified metadata. The extension is determined
+     * based on the file type directory present in the metadata.
+     *
+     * @param metadata the metadata from which the file extension is to be extracted
+     * @return the extracted file extension as a {@code String}, or {@code null} if no valid
+     * file type directory or extension is found
+     */
     private String getFileExtension(Metadata metadata) {
         return metadata
                 .getFirstDirectoryOfType(FileTypeDirectory.class)

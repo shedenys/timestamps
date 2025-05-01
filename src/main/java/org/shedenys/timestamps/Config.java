@@ -11,6 +11,10 @@ import java.util.Properties;
  * mode.
  */
 public class Config {
+    /**
+     * A static {@link Properties} instance responsible for storing application
+     * configuration properties loaded from the "config.properties" file.
+     */
     private static final Properties props = new Properties();
 
     static {

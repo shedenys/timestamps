@@ -16,10 +16,23 @@ import java.util.Date;
  */
 public class HeifFileCreator extends AbstractCreator {
 
+    /**
+     * {@inheritDoc}
+     */
     protected Date getFileDate(Metadata metadata) {
         return getExifDirectory(metadata).getDateOriginal();
     }
 
+    /**
+     * Retrieves the first {@link ExifSubIFDDirectory} instance from the provided metadata.
+     * This directory contains EXIF metadata, such as the original creation date,
+     * which can be utilized as needed.
+     *
+     * @param metadata the metadata containing information extracted from a file,
+     *                 which may include EXIF-specific details
+     * @return the first instance of {@link ExifSubIFDDirectory} found within the metadata,
+     * or {@code null} if no such directory is present
+     */
     private ExifSubIFDDirectory getExifDirectory(Metadata metadata) {
         return metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
     }

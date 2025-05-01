@@ -33,17 +33,39 @@ import java.util.stream.Stream;
  */
 public class RenameFilesCommand implements CommandInterface {
 
+    /**
+     * The directory that contains the files to be processed by the {@link RenameFilesCommand}.
+     * This variable is a reference to an instance of the {@link Directory} class and represents
+     * the location within the file system where file renaming operations are performed.
+     * It is passed during the initialization of the {@link RenameFilesCommand} and is used
+     * to access files for processing and renaming.
+     */
     private final Directory dir;
 
+    /**
+     * Constructs a new {@code RenameFilesCommand} with the specified directory.
+     *
+     * @param dir the directory that contains the files to be renamed. This
+     *            represents the location where the renaming operation will be
+     *            performed.
+     */
     public RenameFilesCommand(Directory dir) {
         this.dir = dir;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void execute() {
         renameFiles();
     }
 
+    /**
+     * Renames files within the specified directory based on extracted metadata.
+     * This method processes all regular files in the directory, extracts metadata
+     * for each file, and applies a renaming operation.
+     */
     private void renameFiles() {
         try (Stream<Path> files = getFileList()) {
             files
@@ -66,6 +88,14 @@ public class RenameFilesCommand implements CommandInterface {
         }
     }
 
+    /**
+     * Retrieves a stream of paths representing all files and directories within
+     * the directory associated with this command.
+     *
+     * @return a {@code Stream<Path>} containing the paths of all entries in the directory.
+     * The returned stream must be closed after use to release any underlying resources.
+     * @throws IOException if an I/O error occurs while accessing the directory.
+     */
     private Stream<Path> getFileList() throws IOException {
         return Files.list(dir.getPath());
     }

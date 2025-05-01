@@ -15,5 +15,14 @@ import java.nio.file.Path;
  */
 public interface FileFactoryInterface {
 
+    /**
+     * Creates a {@link File} instance based on the specified file path and metadata
+     * extracted from the provided input stream.
+     *
+     * @param path        the file path for which the {@link File} instance is to be created
+     * @param inputStream the input stream containing metadata used in creating the {@link File} instance
+     * @return a {@link File} instance created using the provided path and metadata
+     * @throws Exception if an error occurs during metadata extraction or file creation
+     */
     File create(Path path, InputStream inputStream) throws Exception;
 }

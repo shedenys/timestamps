@@ -12,6 +12,12 @@ package org.shedenys.timestamps;
  */
 public interface CommandInterface {
 
+    /**
+     * Executes the encapsulated operation defined by the implementing class.
+     * This method represents the main entry point for the action or task
+     * encapsulated by the command and should be implemented to perform
+     * the desired operation when called.
+     */
     void execute();
 }
 

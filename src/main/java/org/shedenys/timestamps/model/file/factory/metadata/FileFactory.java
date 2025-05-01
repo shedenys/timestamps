@@ -40,12 +40,25 @@ public class FileFactory implements FileFactoryInterface {
             MIME_TYPE_IMAGE_HEIF, HeifFileCreator::new
     );
 
+    /**
+     * {@inheritDoc}
+     */
     public File create(Path path, InputStream inputStream) throws Exception {
         Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
 
         return createFromMetadata(path, metadata);
     }
 
+    /**
+     * Creates a {@link File} instance using the provided {@link Path} and {@link Metadata}.
+     * Determines the appropriate file creator based on the MIME type extracted from the metadata.
+     * If no suitable creator is found, an exception is thrown.
+     *
+     * @param path     the file path for which the {@link File} instance is to be created
+     * @param metadata the metadata containing information used for file creation
+     * @return a {@link File} instance created using the provided path and metadata
+     * @throws Exception if the file type is unsupported or an error occurs during file creation
+     */
     private File createFromMetadata(Path path, Metadata metadata) throws Exception {
         Supplier<AbstractCreator> creatorSupplier = creators.get(getMimeType(metadata));
         if (null == creatorSupplier) {
@@ -56,6 +69,16 @@ public class FileFactory implements FileFactoryInterface {
         return creator.create(path, metadata);
     }
 
+    /**
+     * Extracts and returns the MIME type from the provided {@link Metadata} object.
+     * This method retrieves the MIME type from the first directory of type
+     * {@link FileTypeDirectory} within the metadata.
+     *
+     * @param metadata the {@link Metadata} object containing file information;
+     *                 must not be null and must contain a {@link FileTypeDirectory}.
+     * @return the MIME type as a {@link String}, or null if the MIME type
+     * cannot be determined.
+     */
     private String getMimeType(Metadata metadata) {
         return metadata
                 .getFirstDirectoryOfType(FileTypeDirectory.class)

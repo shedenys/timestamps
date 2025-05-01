@@ -17,10 +17,23 @@ import java.util.Date;
  */
 public class QuickTimeFileCreator extends AbstractCreator {
 
+    /**
+     * {@inheritDoc}
+     */
     protected Date getFileDate(Metadata metadata) {
         return getQuickTimeDirectory(metadata).getDate(QuickTimeDirectory.TAG_CREATION_TIME);
     }
 
+    /**
+     * Retrieves the first {@link QuickTimeDirectory} instance from the provided metadata.
+     * This directory contains QuickTime-specific metadata, such as creation time,
+     * which can be utilized as needed.
+     *
+     * @param metadata the metadata containing information extracted from a file,
+     *                 which may include QuickTime-specific details
+     * @return the first instance of {@link QuickTimeDirectory} found within the metadata,
+     * or {@code null} if no such directory is present
+     */
     private QuickTimeDirectory getQuickTimeDirectory(Metadata metadata) {
         return metadata.getFirstDirectoryOfType(QuickTimeDirectory.class);
     }
