@@ -73,4 +73,13 @@ public record File(Path path, Date date, String extension) {
     public Path createTimestampBasedFilePath() {
         return path.resolveSibling(createTimestampBasedFileName());
     }
+
+    /**
+     * Converts the current file path, represented as a {@code Path}, into a {@code java.io.File} object.
+     *
+     * @return a {@code java.io.File} object representing the current file path
+     */
+    public java.io.File toIOFile() {
+        return this.path.toFile();
+    }
 }

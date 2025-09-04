@@ -1,5 +1,6 @@
 package org.shedenys.timestamps.model.file.usecase;
 
+import lombok.Getter;
 import org.shedenys.timestamps.CommandInterface;
 import org.shedenys.timestamps.model.file.entity.File;
 
@@ -17,6 +18,7 @@ import java.nio.file.StandardCopyOption;
  * {@link CommandInterface}, which encapsulates the rename operation
  * to be executed when called.
  */
+@Getter
 public class RenameCommand implements CommandInterface {
 
     /**
@@ -24,7 +26,7 @@ public class RenameCommand implements CommandInterface {
      * the primary target for the rename process, providing access to details such as its current
      * path and the ability to generate a new timestamp-based path.
      */
-    private final File file;
+    private File file;
 
     /**
      * Constructs a new {@code RenameCommand} with the specified file. This command
@@ -56,6 +58,7 @@ public class RenameCommand implements CommandInterface {
     private void rename(Path path, Path newPath) {
         try {
             Files.move(path, newPath, StandardCopyOption.REPLACE_EXISTING);
+            file = new File(newPath, file.date(), file.extension());
             System.out.println("Renamed. " + path.getFileName() + " -> " + newPath.getFileName());
         } catch (Exception e) {
             System.err.println("Failed to rename " + path.getFileName() + ": " + e.getMessage());
