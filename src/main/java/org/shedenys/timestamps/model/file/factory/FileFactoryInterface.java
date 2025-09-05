@@ -1,5 +1,6 @@
 package org.shedenys.timestamps.model.file.factory;
 
+import org.shedenys.timestamps.exception.MetadataReadFailedException;
 import org.shedenys.timestamps.model.file.entity.File;
 
 import java.io.InputStream;
@@ -22,7 +23,7 @@ public interface FileFactoryInterface {
      * @param path        the file path for which the {@link File} instance is to be created
      * @param inputStream the input stream containing metadata used in creating the {@link File} instance
      * @return a {@link File} instance created using the provided path and metadata
-     * @throws Exception if an error occurs during metadata extraction or file creation
+     * @throws MetadataReadFailedException if an error occurs during metadata extraction or file creation
      */
-    File create(Path path, InputStream inputStream) throws Exception;
+    File create(Path path, InputStream inputStream) throws MetadataReadFailedException;
 }

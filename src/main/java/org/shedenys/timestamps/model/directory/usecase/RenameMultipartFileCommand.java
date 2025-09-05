@@ -3,12 +3,14 @@ package org.shedenys.timestamps.model.directory.usecase;
 import lombok.Getter;
 import org.shedenys.timestamps.CommandInterface;
 import org.shedenys.timestamps.Config;
+import org.shedenys.timestamps.exception.MetadataReadFailedException;
 import org.shedenys.timestamps.model.file.entity.File;
 import org.shedenys.timestamps.model.file.factory.metadata.FileFactory;
 import org.shedenys.timestamps.model.file.usecase.RenameCommand;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -32,14 +34,15 @@ public class RenameMultipartFileCommand implements CommandInterface {
      *
      * @param multipartFile the multipart file to be processed.
      */
-    public RenameMultipartFileCommand(MultipartFile multipartFile) {
+    public RenameMultipartFileCommand(MultipartFile multipartFile) throws IOException {
         try {
             file = saveMultipartFileAsTemporary(multipartFile);
         } catch (IOException e) {
-            System.err.println("Input/output error. Skipping multipart file " + multipartFile.getName() + "...");
+            System.err.println(e.getMessage());
             if (Config.isDevelopment()) {
                 e.printStackTrace();
             }
+            throw e;
         }
     }
 
@@ -47,7 +50,7 @@ public class RenameMultipartFileCommand implements CommandInterface {
      * Executes the renaming operation encapsulated within this command object.
      */
     @Override
-    public void execute() {
+    public void execute() throws MetadataReadFailedException, IOException {
         if (null == file) {
             return;
         }
@@ -55,11 +58,12 @@ public class RenameMultipartFileCommand implements CommandInterface {
             RenameCommand command = (new RenameCommand(fileToEntity(file)));
             command.execute();
             file = command.getFile().toIOFile();
-        } catch (Exception e) {
-            System.err.println("Skipped. Failed to read metadata for: " + file.getPath());
+        } catch (MetadataReadFailedException | IOException e) {
+            System.err.println(e.getMessage());
             if (Config.isDevelopment()) {
                 e.printStackTrace();
             }
+            throw e;
         }
     }
 
@@ -88,10 +92,11 @@ public class RenameMultipartFileCommand implements CommandInterface {
      *             This file represents the source for metadata extraction.
      * @return a {@link File} instance created using the provided file's path
      * and input stream.
-     * @throws Exception if an error occurs during the conversion process,
+     * @throws MetadataReadFailedException if an error occurs during the conversion process,
      *                   such as unsupported file types or I/O issues.
+     * @throws FileNotFoundException if the specified file does not exist.
      */
-    private File fileToEntity(java.io.File file) throws Exception {
+    private File fileToEntity(java.io.File file) throws MetadataReadFailedException, FileNotFoundException {
         return (new FileFactory()).create(file.toPath(), new FileInputStream(file));
     }
 }

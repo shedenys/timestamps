@@ -1,14 +1,17 @@
 package org.shedenys.timestamps.controller;
 
+import org.shedenys.timestamps.exception.MetadataReadFailedException;
 import org.shedenys.timestamps.model.directory.usecase.RenameMultipartFileCommand;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,18 +33,22 @@ public class RenameController {
      * @param multipartFile the multipart file uploaded by the client to be renamed
      * @return a ResponseEntity containing the renamed file wrapped in a FileSystemResource,
      * along with HTTP headers for file download
-     * @throws IOException if an I/O error occurs during file handling
+     *
+     * @throws ResponseStatusException if the rename operation fails for any reason
      */
     @PostMapping("/rename")
-    public ResponseEntity<FileSystemResource> rename(@RequestParam("file") MultipartFile multipartFile) throws IOException {
-        RenameMultipartFileCommand renameCommand = new RenameMultipartFileCommand(multipartFile);
-        renameCommand.execute();
-        File file = renameCommand.getFile();
+    public ResponseEntity<FileSystemResource> rename(@RequestParam("file") MultipartFile multipartFile) {
+        try {
+            RenameMultipartFileCommand renameCommand = new RenameMultipartFileCommand(multipartFile);
+            renameCommand.execute();
+            File file = renameCommand.getFile();
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
-                .contentType(MediaType.APPLICATION_OCTET_STREAM)
-                .body(new FileSystemResource(file));
-
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getName() + "\"")
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(new FileSystemResource(file));
+        } catch (MetadataReadFailedException | IOException e) {
+            throw new ResponseStatusException(HttpStatus.UNPROCESSABLE_ENTITY, e.getMessage());
+        }
     }
 }

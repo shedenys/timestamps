@@ -17,7 +17,9 @@ public interface CommandInterface {
      * This method represents the main entry point for the action or task
      * encapsulated by the command and should be implemented to perform
      * the desired operation when called.
+     *
+     * @throws Exception if an error occurs during the execution of the command.
      */
-    void execute();
+    void execute() throws Exception;
 }
 

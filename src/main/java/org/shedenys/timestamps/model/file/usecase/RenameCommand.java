@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.shedenys.timestamps.CommandInterface;
 import org.shedenys.timestamps.model.file.entity.File;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -43,7 +44,7 @@ public class RenameCommand implements CommandInterface {
      * Executes the rename operation encapsulated by this command.
      */
     @Override
-    public void execute() {
+    public void execute() throws IOException {
         rename(file.path(), file.createTimestampBasedFilePath());
     }
 
@@ -54,14 +55,11 @@ public class RenameCommand implements CommandInterface {
      *
      * @param path    the current path of the file or directory to be renamed
      * @param newPath the new path of the file or directory after the rename operation
+     * @throws IOException if an error occurs during the rename operation
      */
-    private void rename(Path path, Path newPath) {
-        try {
-            Files.move(path, newPath, StandardCopyOption.REPLACE_EXISTING);
-            file = new File(newPath, file.date(), file.extension());
-            System.out.println("Renamed. " + path.getFileName() + " -> " + newPath.getFileName());
-        } catch (Exception e) {
-            System.err.println("Failed to rename " + path.getFileName() + ": " + e.getMessage());
-        }
+    private void rename(Path path, Path newPath) throws IOException {
+        Files.move(path, newPath, StandardCopyOption.REPLACE_EXISTING);
+        file = new File(newPath, file.date(), file.extension());
+        System.out.println("Renamed. " + path.getFileName() + " -> " + newPath.getFileName());
     }
 }

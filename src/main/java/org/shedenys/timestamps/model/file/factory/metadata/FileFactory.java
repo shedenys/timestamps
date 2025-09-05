@@ -1,14 +1,18 @@
 package org.shedenys.timestamps.model.file.factory.metadata;
 
 import com.drew.imaging.ImageMetadataReader;
+import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.file.FileTypeDirectory;
+import org.shedenys.timestamps.exception.MetadataReadFailedException;
+import org.shedenys.timestamps.exception.UnsupportedFileTypeException;
 import org.shedenys.timestamps.model.file.entity.File;
 import org.shedenys.timestamps.model.file.factory.FileFactoryInterface;
 import org.shedenys.timestamps.model.file.factory.metadata.creator.AbstractCreator;
 import org.shedenys.timestamps.model.file.factory.metadata.creator.HeifFileCreator;
 import org.shedenys.timestamps.model.file.factory.metadata.creator.QuickTimeFileCreator;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.Map;
@@ -43,10 +47,14 @@ public class FileFactory implements FileFactoryInterface {
     /**
      * {@inheritDoc}
      */
-    public File create(Path path, InputStream inputStream) throws Exception {
-        Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
+    public File create(Path path, InputStream inputStream) throws MetadataReadFailedException {
+        try {
+            Metadata metadata = ImageMetadataReader.readMetadata(inputStream);
 
-        return createFromMetadata(path, metadata);
+            return createFromMetadata(path, metadata);
+        } catch (ImageProcessingException | UnsupportedFileTypeException | IOException e) {
+            throw new MetadataReadFailedException(path.toString());
+        }
     }
 
     /**
@@ -57,12 +65,12 @@ public class FileFactory implements FileFactoryInterface {
      * @param path     the file path for which the {@link File} instance is to be created
      * @param metadata the metadata containing information used for file creation
      * @return a {@link File} instance created using the provided path and metadata
-     * @throws Exception if the file type is unsupported or an error occurs during file creation
+     * @throws UnsupportedFileTypeException if the file type is unsupported or an error occurs during file creation
      */
-    private File createFromMetadata(Path path, Metadata metadata) throws Exception {
+    private File createFromMetadata(Path path, Metadata metadata) throws UnsupportedFileTypeException {
         Supplier<AbstractCreator> creatorSupplier = creators.get(getMimeType(metadata));
         if (null == creatorSupplier) {
-            throw new Exception("Unsupported file type.");
+            throw new UnsupportedFileTypeException();
         }
         AbstractCreator creator = creatorSupplier.get();
 
