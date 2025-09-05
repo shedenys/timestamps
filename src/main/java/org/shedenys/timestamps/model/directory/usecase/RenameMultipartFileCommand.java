@@ -93,10 +93,10 @@ public class RenameMultipartFileCommand implements CommandInterface {
      * @return a {@link File} instance created using the provided file's path
      * and input stream.
      * @throws MetadataReadFailedException if an error occurs during the conversion process,
-     *                   such as unsupported file types or I/O issues.
-     * @throws FileNotFoundException if the specified file does not exist.
+     *                                     such as unsupported file types or I/O issues.
+     * @throws FileNotFoundException       if the specified file does not exist.
      */
     private File fileToEntity(java.io.File file) throws MetadataReadFailedException, FileNotFoundException {
-        return (new FileFactory()).create(file.toPath(), new FileInputStream(file));
+        return File.of(file.toPath(), new FileInputStream(file));
     }
 }

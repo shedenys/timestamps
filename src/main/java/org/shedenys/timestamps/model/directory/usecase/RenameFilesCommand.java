@@ -73,16 +73,14 @@ public class RenameFilesCommand implements CommandInterface {
                     .filter(Files::isRegularFile)
                     .forEach(path -> {
                         try (InputStream inputStream = Files.newInputStream(path)) {
-                            File file = (new FileFactory()).create(path, inputStream);
+                            File file = File.of(path, inputStream);
                             (new RenameCommand(file)).execute();
-                        }
-                        catch (MetadataReadFailedException e) {
+                        } catch (MetadataReadFailedException e) {
                             System.err.println("Skipped. Failed to read metadata for: " + path);
                             if (Config.isDevelopment()) {
                                 e.printStackTrace();
                             }
-                        }
-                        catch (IOException e) {
+                        } catch (IOException e) {
                             System.err.println("Failed to rename " + path.getFileName() + ": " + e.getMessage());
                             if (Config.isDevelopment()) {
                                 e.printStackTrace();

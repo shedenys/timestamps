@@ -1,5 +1,8 @@
 package org.shedenys.timestamps.model.file.entity;
 
+import org.shedenys.timestamps.model.file.factory.metadata.FileFactory;
+
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -46,6 +49,20 @@ public record File(Path path, Date date, String extension) {
      * timestamp information based on the provided {@code date} attribute.
      */
     private static final String TIMESTAMP_DATE_PATTERN = "yyyy-MM-dd-HH-mm-ss";
+
+
+    /**
+     * Creates a new {@code File} instance using the provided {@code Path} and {@code InputStream}.
+     * This method utilizes the {@code FileFactory} to create a file based on the supplied path
+     * and the metadata extracted from the input stream.
+     *
+     * @param path        the {@code Path} representing the file's location on the file system
+     * @param inputStream the {@code InputStream} containing metadata used to construct the {@code File} instance
+     * @return a newly created {@code File} instance based on the provided path and input stream
+     */
+    public static File of(Path path, InputStream inputStream) {
+        return (new FileFactory()).create(path, inputStream);
+    }
 
     /**
      * Creates a file name based on the associated timestamp and file extension.
