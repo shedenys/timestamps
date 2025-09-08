@@ -2,6 +2,10 @@ package org.shedenys.timestamps;
 
 import org.shedenys.timestamps.model.directory.entity.Directory;
 import org.shedenys.timestamps.model.directory.usecase.RenameFilesCommand;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
 import java.nio.file.*;
 
@@ -10,7 +14,24 @@ import java.nio.file.*;
  * This class provides functionality to determine the input directory and
  * execute the renaming operation on the files within the specified directory.
  */
-public class Main {
+@Component
+@Profile("cli")
+public class CliRunner implements CommandLineRunner {
+
+    /**
+     * Represents the application properties used to configure the behavior of the application.
+     */
+    private final ApplicationProperties properties;
+
+    /**
+     * Constructs a new {@code CliRunner} instance.
+     *
+     * @param properties the application properties used to configure the behavior of the application
+     */
+    @Autowired
+    public CliRunner(ApplicationProperties properties) {
+        this.properties = properties;
+    }
 
     /**
      * The main entry point of the application.
@@ -22,7 +43,8 @@ public class Main {
      *             a default directory named "input" relative to the current working
      *             directory is used.
      */
-    public static void main(String[] args) {
+    @Override
+    public void run(String... args) {
 
         Path inputDir;
         if (args.length == 0) {
@@ -34,9 +56,9 @@ public class Main {
         }
 
         try {
-            (new RenameFilesCommand(new Directory(inputDir))).execute();
+            (new RenameFilesCommand(new Directory(inputDir), properties)).execute();
         } catch (NoSuchFileException e) {
-            if (Config.isDevelopment()) {
+            if (properties.isDevelopment()) {
                 e.printStackTrace();
             } else {
                 System.err.println(e.getMessage());

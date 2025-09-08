@@ -1,7 +1,7 @@
 package org.shedenys.timestamps.model.directory.usecase;
 
+import org.shedenys.timestamps.ApplicationProperties;
 import org.shedenys.timestamps.CommandInterface;
-import org.shedenys.timestamps.Config;
 import org.shedenys.timestamps.exception.MetadataReadFailedException;
 import org.shedenys.timestamps.model.directory.entity.Directory;
 import org.shedenys.timestamps.model.file.entity.File;
@@ -29,10 +29,15 @@ import java.util.stream.Stream;
  * - Renaming the file using the extracted metadata with the help of a {@link RenameCommand}.
  * <p>
  * Errors during file processing or renaming are logged. If the application is
- * in development mode (determined via {@link Config#isDevelopment()}), additional
+ * in development mode (determined via {@link ApplicationProperties#isDevelopment()}), additional
  * error details are printed to the console.
  */
 public class RenameFilesCommand implements CommandInterface {
+
+    /**
+     * Represents the application properties used to configure the behavior of the application.
+     */
+    private final ApplicationProperties properties;
 
     /**
      * The directory that contains the files to be processed by the {@link RenameFilesCommand}.
@@ -44,13 +49,13 @@ public class RenameFilesCommand implements CommandInterface {
     private final Directory dir;
 
     /**
-     * Constructs a new {@code RenameFilesCommand} with the specified directory.
+     * Constructs a new {@code RenameFilesCommand} with the specified directory and properties.
      *
-     * @param dir the directory that contains the files to be renamed. This
-     *            represents the location where the renaming operation will be
-     *            performed.
+     * @param dir        the directory that contains the files to be renamed
+     * @param properties the application properties containing configuration settings
      */
-    public RenameFilesCommand(Directory dir) {
+    public RenameFilesCommand(Directory dir, ApplicationProperties properties) {
+        this.properties = properties;
         this.dir = dir;
     }
 
@@ -77,19 +82,19 @@ public class RenameFilesCommand implements CommandInterface {
                             (new RenameCommand(file)).execute();
                         } catch (MetadataReadFailedException e) {
                             System.err.println("Skipped. Failed to read metadata for: " + path);
-                            if (Config.isDevelopment()) {
+                            if (properties.isDevelopment()) {
                                 e.printStackTrace();
                             }
                         } catch (IOException e) {
                             System.err.println("Failed to rename " + path.getFileName() + ": " + e.getMessage());
-                            if (Config.isDevelopment()) {
+                            if (properties.isDevelopment()) {
                                 e.printStackTrace();
                             }
                         }
                     });
         } catch (IOException e) {
             System.err.println("Input/output error. Skipping files in " + dir.getPath() + "...");
-            if (Config.isDevelopment()) {
+            if (properties.isDevelopment()) {
                 e.printStackTrace();
             }
         }

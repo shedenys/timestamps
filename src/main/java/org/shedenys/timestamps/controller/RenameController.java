@@ -1,7 +1,9 @@
 package org.shedenys.timestamps.controller;
 
+import org.shedenys.timestamps.ApplicationProperties;
 import org.shedenys.timestamps.exception.MetadataReadFailedException;
 import org.shedenys.timestamps.model.directory.usecase.RenameMultipartFileCommand;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,6 +28,21 @@ import java.io.IOException;
 public class RenameController {
 
     /**
+     * Represents the application properties used to configure the behavior of the application.
+     */
+    private final ApplicationProperties properties;
+
+    /**
+     * Constructs a new RenameController with the specified application properties.
+     *
+     * @param properties the application properties containing configuration settings
+     */
+    @Autowired
+    public RenameController(ApplicationProperties properties) {
+        this.properties = properties;
+    }
+
+    /**
      * Renames the uploaded file and returns the renamed file as a download response.
      * The endpoint processes a file sent in the request, performs a rename operation,
      * and sends back the renamed file with appropriate headers for file download.
@@ -39,7 +56,7 @@ public class RenameController {
     @PostMapping("/rename")
     public ResponseEntity<FileSystemResource> rename(@RequestParam("file") MultipartFile multipartFile) {
         try {
-            RenameMultipartFileCommand renameCommand = new RenameMultipartFileCommand(multipartFile);
+            RenameMultipartFileCommand renameCommand = new RenameMultipartFileCommand(multipartFile, properties);
             renameCommand.execute();
             File file = renameCommand.getFile();
 

@@ -1,11 +1,10 @@
 package org.shedenys.timestamps.model.directory.usecase;
 
 import lombok.Getter;
+import org.shedenys.timestamps.ApplicationProperties;
 import org.shedenys.timestamps.CommandInterface;
-import org.shedenys.timestamps.Config;
 import org.shedenys.timestamps.exception.MetadataReadFailedException;
 import org.shedenys.timestamps.model.file.entity.File;
-import org.shedenys.timestamps.model.file.factory.metadata.FileFactory;
 import org.shedenys.timestamps.model.file.usecase.RenameCommand;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,21 +24,30 @@ import java.util.Objects;
 public class RenameMultipartFileCommand implements CommandInterface {
 
     /**
+     * Represents the application properties used to configure the behavior of the application.
+     */
+    private final ApplicationProperties properties;
+
+    /**
      * Represents a temporary file created on the file system for handling a {@link MultipartFile}.
      */
     private java.io.File file;
 
     /**
-     * Constructs a new {@code RenameMultipartFileCommand} with the given multipart file.
+     * Constructs a new {@code RenameMultipartFileCommand} with the given multipart file
+     * and application properties.
      *
-     * @param multipartFile the multipart file to be processed.
+     * @param multipartFile the multipart file to be processed
+     * @param properties    the application properties containing configuration settings
+     * @throws IOException if an I/O error occurs while processing the multipart file
      */
-    public RenameMultipartFileCommand(MultipartFile multipartFile) throws IOException {
+    public RenameMultipartFileCommand(MultipartFile multipartFile, ApplicationProperties properties) throws IOException {
+        this.properties = properties;
         try {
             file = saveMultipartFileAsTemporary(multipartFile);
         } catch (IOException e) {
             System.err.println(e.getMessage());
-            if (Config.isDevelopment()) {
+            if (properties.isDevelopment()) {
                 e.printStackTrace();
             }
             throw e;
@@ -60,7 +68,7 @@ public class RenameMultipartFileCommand implements CommandInterface {
             file = command.getFile().toIOFile();
         } catch (MetadataReadFailedException | IOException e) {
             System.err.println(e.getMessage());
-            if (Config.isDevelopment()) {
+            if (properties.isDevelopment()) {
                 e.printStackTrace();
             }
             throw e;
