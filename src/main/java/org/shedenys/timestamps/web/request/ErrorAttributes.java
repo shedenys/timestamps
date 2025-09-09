@@ -1,4 +1,4 @@
-package org.shedenys.timestamps.request;
+package org.shedenys.timestamps.web.request;
 
 import org.springframework.boot.web.error.ErrorAttributeOptions;
 import org.springframework.boot.web.servlet.error.DefaultErrorAttributes;

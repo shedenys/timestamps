@@ -1,8 +1,8 @@
-package org.shedenys.timestamps.controller;
+package org.shedenys.timestamps.web.controller;
 
 import jakarta.validation.Valid;
 import org.shedenys.timestamps.ApplicationProperties;
-import org.shedenys.timestamps.request.RenameRequest;
+import org.shedenys.timestamps.web.request.RenameRequest;
 import org.shedenys.timestamps.exception.MetadataReadFailedException;
 import org.shedenys.timestamps.model.directory.usecase.RenameMultipartFileCommand;
 import org.springframework.beans.factory.annotation.Autowired;

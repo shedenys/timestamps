@@ -1,4 +1,4 @@
-package org.shedenys.timestamps.request;
+package org.shedenys.timestamps.web.request;
 
 import lombok.Getter;
 import lombok.Setter;
