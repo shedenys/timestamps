@@ -17,4 +17,18 @@ public class ApplicationProperties {
      * Flag indicating whether the application is running in development mode.
      */
     private boolean development;
+
+    /**
+     * Security properties.
+     */
+    private SecurityProperties security = new SecurityProperties();
+
+    /**
+     * Configuration properties for application security settings.
+     */
+    @Getter
+    @Setter
+    public static class SecurityProperties {
+        private String token;
+    }
 }
