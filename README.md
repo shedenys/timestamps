@@ -1,18 +1,7 @@
 # timestamps
 The app that renames media files based on their creation data. You can run the app using Java installed on your local machine or use any pre-built package for Mac.
 
-## Installation
-Skip this if you like to run app from the source code.
-
-### macOS package
-#### Install package to your system
-Download [PKG file](https://github.com/shedenys/timestamps/raw/refs/heads/artifacts/Timestamps-1.0.0-beta.1.pkg), open and follow the instructions.
-#### Create symlink
-```bash
-sudo ln -s "/Applications/Timestamps.app/Contents/MacOS/timestamps" /usr/local/bin/timestamps
-```
-
-## Usage
+## Using package
 
 ### Run the app from sourcecode using Java
 
@@ -65,7 +54,7 @@ Delete manually the app `Timestamps` from the `Applications` folder and delete t
 sudo rm /usr/local/bin/timestamps
 ```
 
-## Using REST request without installation
+## Using REST request
 
 Start HTTP server:
 ```bash
