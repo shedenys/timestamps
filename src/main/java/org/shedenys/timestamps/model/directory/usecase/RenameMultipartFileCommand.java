@@ -1,6 +1,7 @@
 package org.shedenys.timestamps.model.directory.usecase;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.shedenys.timestamps.ApplicationProperties;
 import org.shedenys.timestamps.CommandInterface;
 import org.shedenys.timestamps.exception.MetadataReadFailedException;
@@ -21,6 +22,7 @@ import java.util.Objects;
  * {@link RenameCommand}.
  */
 @Getter
+@Slf4j
 public class RenameMultipartFileCommand implements CommandInterface {
 
     /**
@@ -46,9 +48,9 @@ public class RenameMultipartFileCommand implements CommandInterface {
         try {
             file = saveMultipartFileAsTemporary(multipartFile);
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            log.error(e.getMessage(), e);
             if (properties.isDevelopment()) {
-                e.printStackTrace();
+                log.debug("Stacktrace:", e);
             }
             throw e;
         }
@@ -67,9 +69,9 @@ public class RenameMultipartFileCommand implements CommandInterface {
             command.execute();
             file = command.getFile().toIOFile();
         } catch (MetadataReadFailedException | IOException e) {
-            System.err.println(e.getMessage());
+            log.error(e.getMessage(), e);
             if (properties.isDevelopment()) {
-                e.printStackTrace();
+                log.debug("Stacktrace:", e);
             }
             throw e;
         }

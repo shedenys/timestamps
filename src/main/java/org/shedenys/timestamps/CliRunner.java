@@ -1,5 +1,6 @@
 package org.shedenys.timestamps;
 
+import lombok.extern.slf4j.Slf4j;
 import org.shedenys.timestamps.model.directory.entity.Directory;
 import org.shedenys.timestamps.model.directory.usecase.RenameFilesCommand;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.nio.file.*;
  */
 @Component
 @Profile("cli")
+@Slf4j
 public class CliRunner implements CommandLineRunner {
 
     /**
@@ -59,9 +61,9 @@ public class CliRunner implements CommandLineRunner {
             (new RenameFilesCommand(new Directory(inputDir), properties)).execute();
         } catch (NoSuchFileException e) {
             if (properties.isDevelopment()) {
-                e.printStackTrace();
+                log.debug("Stacktrace:", e);
             } else {
-                System.err.println(e.getMessage());
+                log.error(e.getMessage(), e);
             }
         }
     }

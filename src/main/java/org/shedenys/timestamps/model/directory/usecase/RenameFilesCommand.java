@@ -1,5 +1,6 @@
 package org.shedenys.timestamps.model.directory.usecase;
 
+import lombok.extern.slf4j.Slf4j;
 import org.shedenys.timestamps.ApplicationProperties;
 import org.shedenys.timestamps.CommandInterface;
 import org.shedenys.timestamps.exception.MetadataReadFailedException;
@@ -32,6 +33,7 @@ import java.util.stream.Stream;
  * in development mode (determined via {@link ApplicationProperties#isDevelopment()}), additional
  * error details are printed to the console.
  */
+@Slf4j
 public class RenameFilesCommand implements CommandInterface {
 
     /**
@@ -81,21 +83,21 @@ public class RenameFilesCommand implements CommandInterface {
                             File file = File.of(path, inputStream);
                             (new RenameCommand(file)).execute();
                         } catch (MetadataReadFailedException e) {
-                            System.err.println("Skipped. Failed to read metadata for: " + path);
+                            log.error("Skipped. Failed to read metadata for: {}", path, e);
                             if (properties.isDevelopment()) {
-                                e.printStackTrace();
+                                log.debug("Stacktrace:", e);
                             }
                         } catch (IOException e) {
-                            System.err.println("Failed to rename " + path.getFileName() + ": " + e.getMessage());
+                            log.error("Failed to rename {}:", path.getFileName(), e);
                             if (properties.isDevelopment()) {
-                                e.printStackTrace();
+                                log.debug("Stacktrace:", e);
                             }
                         }
                     });
         } catch (IOException e) {
-            System.err.println("Input/output error. Skipping files in " + dir.getPath() + "...");
+            log.error("Input/output error. Skipping files in {}...", dir.getPath(), e);
             if (properties.isDevelopment()) {
-                e.printStackTrace();
+                log.debug("Stacktrace:", e);
             }
         }
     }
