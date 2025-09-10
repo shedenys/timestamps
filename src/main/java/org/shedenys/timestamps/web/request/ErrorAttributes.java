@@ -28,7 +28,7 @@ public class ErrorAttributes extends DefaultErrorAttributes {
         Throwable error = getError(webRequest);
 
         if (error instanceof org.springframework.web.bind.MethodArgumentNotValidException ex) {
-            // Беремо першу помилку з валідації
+            // Take the first validation error message
             String message = ex.getBindingResult().getFieldErrors().stream()
                     .findFirst()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
