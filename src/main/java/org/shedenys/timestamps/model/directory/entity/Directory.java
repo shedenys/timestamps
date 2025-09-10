@@ -1,5 +1,7 @@
 package org.shedenys.timestamps.model.directory.entity;
 
+import lombok.Getter;
+
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -10,6 +12,7 @@ import java.nio.file.Path;
  * It serves as a lightweight wrapper around the Path instance, providing
  * clear context for operations or commands targeting directory resources.
  */
+@Getter
 public class Directory {
 
     /**
@@ -29,15 +32,6 @@ public class Directory {
             throw new NoSuchFileException("Directory does not exist: " + path.toString());
         }
         this.path = path;
-    }
-
-    /**
-     * Returns the filesystem path associated with this object.
-     *
-     * @return the {@link Path} representing the directory in the file system.
-     */
-    public Path getPath() {
-        return path;
     }
 
     /**
