@@ -33,7 +33,7 @@ public abstract class AbstractCreator {
         return new File(
                 path,
                 getFileDate(metadata),
-                getFileExtension(metadata)
+                getFileExtension(path)
         );
     }
 
@@ -55,9 +55,26 @@ public abstract class AbstractCreator {
      * @return the extracted file extension as a {@code String}, or {@code null} if no valid
      * file type directory or extension is found
      */
+    @Deprecated
     private String getFileExtension(Metadata metadata) {
         return metadata
                 .getFirstDirectoryOfType(FileTypeDirectory.class)
                 .getString(FileTypeDirectory.TAG_EXPECTED_FILE_NAME_EXTENSION);
+    }
+
+    /**
+     * Retrieves the file extension from the specified path.
+     *
+     * @param path the path from which the file extension is to be extracted
+     * @return the extracted file extension as a {@code String}, or an empty string if no valid
+     * extension is found
+     */
+    private static String getFileExtension(Path path) {
+        String fileName = path.getFileName().toString();
+        int lastDot = fileName.lastIndexOf('.');
+
+        return (lastDot > 0 && lastDot < fileName.length() - 1)
+                ? fileName.substring(lastDot + 1)
+                : "";
     }
 }
