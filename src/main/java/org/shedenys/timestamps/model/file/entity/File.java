@@ -13,18 +13,21 @@ import java.util.Date;
  * This class is commonly used in combination with metadata extraction and file
  * creation utilities to manage and organize files based on their attributes.
  *
- * @param path      The file system path associated with this file. This path specifies the location of the file
- *                  within the file system and is utilized for operations such as resolving sibling paths
- *                  and generating full paths using attributes of this class.
- * @param date      Represents the creation or associated timestamp of the file.
- *                  This attribute is used for date-specific operations, such as
- *                  generating file names and paths that incorporate a timestamp.
- * @param extension Represents the file extension of this file. The extension is used to identify
- *                  the type or format of the file (e.g., "txt", "jpg", "mp4"). It is commonly
- *                  appended to file names or paths to denote the file's type and is utilized
- *                  when generating timestamp-based file names or paths.
+ * @param path        The file system path associated with this file. This path specifies the location of the file
+ *                    within the file system and is utilized for operations such as resolving sibling paths
+ *                    and generating full paths using attributes of this class.
+ * @param date        Represents the creation or associated timestamp of the file.
+ *                    This attribute is used for date-specific operations, such as
+ *                    generating file names and paths that incorporate a timestamp.
+ * @param geoLocation Represents the geographic location of this file as an array of two {@code Double} values
+ *                    representing latitude and longitude. It is used to provide location-specific information
+ *                    about the file's origin or context.
+ * @param extension   Represents the file extension of this file. The extension is used to identify
+ *                    the type or format of the file (e.g., "txt", "jpg", "mp4"). It is commonly
+ *                    appended to file names or paths to denote the file's type and is utilized
+ *                    when generating timestamp-based file names or paths.
  */
-public record File(Path path, Date date, String extension) {
+public record File(Path path, Date date, Double[] geoLocation, String extension) {
 
     public static final String MIME_TYPE_VIDEO_QUICKTIME = "video/quicktime";
     public static final String MIME_TYPE_IMAGE_HEIF = "image/heif";
@@ -48,6 +51,18 @@ public record File(Path path, Date date, String extension) {
     private static final String TIMESTAMP_DATE_PATTERN = "yyyy-MM-dd-HH-mm-ss";
 
     /**
+     * Defines the date-time pattern used for generating timestamp-based strings in the format "yyyy-MM".
+     * <p>
+     * The pattern includes:
+     * - `yyyy`: 4-digit year
+     * - `MM`: 2-digit month
+     * <p>
+     * This constant is used internally in methods that generate file names or paths incorporating
+     * timestamp information based on the provided {@code date} attribute.
+     */
+    private static final String MONTH_YEAR_DATE_PATTERN = "yyyy-MM";
+
+    /**
      * Creates a file name based on the associated timestamp and file extension.
      * The file name is constructed by formatting the date using a predefined
      * timestamp pattern and appending the file extension.
@@ -60,6 +75,32 @@ public record File(Path path, Date date, String extension) {
         String formatted = sdf.format(date);
 
         return formatted + "." + extension;
+    }
+
+    /**
+     * Creates a directory name based on the associated timestamp.
+     * The directory name is formatted using a predefined pattern that includes
+     * the year and month of the associated date.
+     *
+     * @return a {@code String} representing the generated directory name in the
+     * format "yyyy-MM"
+     */
+    public String createTimestampBasedDirName() {
+        DateFormat sdf = new SimpleDateFormat(MONTH_YEAR_DATE_PATTERN);
+
+        return sdf.format(date);
+    }
+
+    /**
+     * Creates a directory name based on the associated timestamp.
+     * The directory name is formatted using a predefined pattern that includes
+     * the year and month of the associated date.
+     *
+     * @return a {@code String} representing the generated directory name in the
+     * format "lon, lat"
+     */
+    public String createGeoLocationBasedDirName() {
+        return String.format("%.2f", geoLocation[0]) + ", " + String.format("%.2f", geoLocation[1]);
     }
 
     /**

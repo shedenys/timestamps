@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/activity-diagram-beta
+
+start
+
+:get file geo data;
+if (does geo-based folder exist?) then (true)
+else (false)
+    :create geo-based folder;
+endif
+:move file to geo-based folder;
+:get file creation date;
+if (does year-month folder exists?) then (true)
+else (false)
+    :create year-month folder;
+endif;
+:move file to year-month folder;
+:rename file based on creation date;
+
+stop
+
+@enduml

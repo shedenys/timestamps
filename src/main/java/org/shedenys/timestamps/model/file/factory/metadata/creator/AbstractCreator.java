@@ -1,7 +1,7 @@
 package org.shedenys.timestamps.model.file.factory.metadata.creator;
 
 import com.drew.metadata.Metadata;
-import com.drew.metadata.file.FileTypeDirectory;
+import com.drew.metadata.exif.GpsDirectory;
 import org.shedenys.timestamps.model.file.entity.File;
 
 import java.nio.file.Path;
@@ -33,7 +33,8 @@ public abstract class AbstractCreator {
         return new File(
                 path,
                 getFileDate(metadata),
-                getFileExtension(metadata)
+                getFileGeoLocationString(metadata),
+                getFileExtension(path)
         );
     }
 
@@ -48,16 +49,41 @@ public abstract class AbstractCreator {
     protected abstract Date getFileDate(Metadata metadata);
 
     /**
-     * Extracts the file extension from the specified metadata. The extension is determined
-     * based on the file type directory present in the metadata.
+     * Retrieves the file geographic location as a pair of latitude and longitude coordinates from the provided metadata.
      *
-     * @param metadata the metadata from which the file extension is to be extracted
-     * @return the extracted file extension as a {@code String}, or {@code null} if no valid
-     * file type directory or extension is found
+     * @param metadata the metadata from which the geographic location is to be extracted
+     * @return the extracted geographic location as an array of two {@code Double} values representing latitude
+     * and longitude, or {@code null} if no valid location is found
      */
-    private String getFileExtension(Metadata metadata) {
-        return metadata
-                .getFirstDirectoryOfType(FileTypeDirectory.class)
-                .getString(FileTypeDirectory.TAG_EXPECTED_FILE_NAME_EXTENSION);
+    private Double[] getFileGeoLocationString(Metadata metadata) {
+        var geoLocation = getGpsDirectory(metadata).getGeoLocation();
+
+        return new Double[]{geoLocation.getLatitude(), geoLocation.getLongitude()};
+    }
+
+    /**
+     * Retrieves the file extension from the specified path.
+     *
+     * @param path the path from which the file extension is to be extracted
+     * @return the extracted file extension as a {@code String}, or an empty string if no valid
+     * extension is found
+     */
+    private static String getFileExtension(Path path) {
+        String fileName = path.getFileName().toString();
+        int lastDot = fileName.lastIndexOf('.');
+
+        return (lastDot > 0 && lastDot < fileName.length() - 1)
+                ? fileName.substring(lastDot + 1)
+                : "";
+    }
+
+    /**
+     * Retrieves the GPS directory from the specified metadata.
+     *
+     * @param metadata the metadata from which the GPS directory is to be extracted
+     * @return the extracted GPS directory, or {@code null} if no valid GPS directory is found
+     */
+    private GpsDirectory getGpsDirectory(Metadata metadata) {
+        return metadata.getFirstDirectoryOfType(GpsDirectory.class);
     }
 }

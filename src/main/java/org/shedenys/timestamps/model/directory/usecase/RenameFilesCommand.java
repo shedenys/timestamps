@@ -58,22 +58,25 @@ public class RenameFilesCommand implements CommandInterface {
      */
     @Override
     public void execute() {
-        renameFiles();
+        renameFiles(dir);
     }
 
     /**
      * Renames files within the specified directory based on extracted metadata.
      * This method processes all regular files in the directory, extracts metadata
      * for each file, and applies a renaming operation.
+     *
+     * @param dir the directory where the renaming operation will be performed
      */
-    private void renameFiles() {
-        try (Stream<Path> files = getFileList()) {
+    private void renameFiles(Directory dir) {
+        try (Stream<Path> files = getFileList(dir)) {
             files
                     .filter(Files::isRegularFile)
                     .forEach(path -> {
                         try (InputStream inputStream = Files.newInputStream(path)) {
                             File file = (new FileFactory()).create(path, inputStream);
                             (new RenameCommand(file)).execute();
+                            (new MoveFileCommand(file)).execute();
                         } catch (Exception e) {
                             System.err.println("Skipped. Failed to read metadata for: " + path);
                             if (Config.isDevelopment()) {
@@ -93,11 +96,12 @@ public class RenameFilesCommand implements CommandInterface {
      * Retrieves a stream of paths representing all files and directories within
      * the directory associated with this command.
      *
+     * @param dir the directory whose entries will be listed
      * @return a {@code Stream<Path>} containing the paths of all entries in the directory.
      * The returned stream must be closed after use to release any underlying resources.
      * @throws IOException if an I/O error occurs while accessing the directory.
      */
-    private Stream<Path> getFileList() throws IOException {
+    private Stream<Path> getFileList(Directory dir) throws IOException {
         return Files.list(dir.getPath());
     }
 }
