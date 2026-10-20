@@ -6,7 +6,7 @@ Skip this if you like to run app from the source code.
 
 ### macOS package
 #### Install package to your system
-Download [PKG file](https://github.com/shedenys/timestamps/raw/refs/heads/artifacts/Timestamps-1.1.0-beta.1.pkg), open and follow the instructions.
+Download [PKG file](https://github.com/shedenys/timestamps/raw/refs/heads/artifacts/Timestamps-1.0.0-beta.1.pkg), open and follow the instructions.
 #### Create symlink
 ```bash
 sudo ln -s "/Applications/Timestamps.app/Contents/MacOS/timestamps" /usr/local/bin/timestamps
@@ -52,11 +52,11 @@ cd target
 #### Run the app to rename files
 Run command with specifying the path to the directory with files as an argument:
 ```bash
-java -jar timestamps-1.1-SNAPSHOT.jar <directory_path>
+java -jar timestamps-1.0-SNAPSHOT.jar <directory_path>
 ```
 Example to rename files from `/Users/someuser/direcotryname` directory:
 ```bash
-java -jar timestamps-1.1-SNAPSHOT.jar /Users/someuser/directoryname
+java -jar timestamps-1.0-SNAPSHOT.jar /Users/someuser/directoryname
 ```
 
 ### Run the app on macOS from the installed package
