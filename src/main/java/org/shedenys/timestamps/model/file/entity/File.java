@@ -1,9 +1,12 @@
 package org.shedenys.timestamps.model.file.entity;
 
+import org.shedenys.timestamps.Config;
+
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Represents a file with specific attributes such as path, creation date,
@@ -31,6 +34,7 @@ public record File(Path path, Date date, Double[] geoLocation, String extension)
 
     public static final String MIME_TYPE_VIDEO_QUICKTIME = "video/quicktime";
     public static final String MIME_TYPE_IMAGE_HEIF = "image/heif";
+    public static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
 
     /**
      * Defines the date-time pattern used for generating timestamp-based strings in the format
@@ -71,10 +75,7 @@ public record File(Path path, Date date, Double[] geoLocation, String extension)
      * format "formatted_timestamp.extension"
      */
     public String createTimestampBasedFileName() {
-        DateFormat sdf = new SimpleDateFormat(TIMESTAMP_DATE_PATTERN);
-        String formatted = sdf.format(date);
-
-        return formatted + "." + extension;
+        return createDateFormat(TIMESTAMP_DATE_PATTERN).format(date) + "." + extension;
     }
 
     /**
@@ -86,9 +87,7 @@ public record File(Path path, Date date, Double[] geoLocation, String extension)
      * format "yyyy-MM"
      */
     public String createTimestampBasedDirName() {
-        DateFormat sdf = new SimpleDateFormat(MONTH_YEAR_DATE_PATTERN);
-
-        return sdf.format(date);
+        return createDateFormat(MONTH_YEAR_DATE_PATTERN).format(date);
     }
 
     /**
@@ -113,5 +112,18 @@ public record File(Path path, Date date, Double[] geoLocation, String extension)
      */
     public Path createTimestampBasedFilePath() {
         return path.resolveSibling(createTimestampBasedFileName());
+    }
+
+    /**
+     * Creates a date format object based on the specified pattern.
+     *
+     * @param pattern the pattern to use for formatting dates
+     * @return a {@code DateFormat} object configured with the specified pattern and timezone
+     */
+    private static DateFormat createDateFormat(String pattern) {
+        DateFormat sdf = new SimpleDateFormat(pattern);
+        sdf.setTimeZone(TimeZone.getTimeZone(Config.get("timezone")));
+
+        return sdf;
     }
 }
