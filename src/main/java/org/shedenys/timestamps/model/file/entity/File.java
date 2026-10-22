@@ -1,12 +1,11 @@
 package org.shedenys.timestamps.model.file.entity;
 
-import org.shedenys.timestamps.Config;
+import com.drew.lang.annotations.Nullable;
 
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.TimeZone;
 
 /**
  * Represents a file with specific attributes such as path, creation date,
@@ -30,11 +29,12 @@ import java.util.TimeZone;
  *                    appended to file names or paths to denote the file's type and is utilized
  *                    when generating timestamp-based file names or paths.
  */
-public record File(Path path, Date date, Double[] geoLocation, String extension) {
+public record File(Path path, Date date, @Nullable Double[] geoLocation, String extension) {
 
     public static final String MIME_TYPE_VIDEO_QUICKTIME = "video/quicktime";
     public static final String MIME_TYPE_IMAGE_HEIF = "image/heif";
     public static final String MIME_TYPE_IMAGE_JPEG = "image/jpeg";
+    public static final String MIME_TYPE_IMAGE_TIFF = "image/tiff";
 
     /**
      * Defines the date-time pattern used for generating timestamp-based strings in the format
@@ -99,6 +99,9 @@ public record File(Path path, Date date, Double[] geoLocation, String extension)
      * format "lon, lat"
      */
     public String createGeoLocationBasedDirName() {
+        if (geoLocation == null) {
+            return "no_location";
+        }
         return String.format("%.2f", geoLocation[0]) + ", " + String.format("%.2f", geoLocation[1]);
     }
 
@@ -122,7 +125,6 @@ public record File(Path path, Date date, Double[] geoLocation, String extension)
      */
     private static DateFormat createDateFormat(String pattern) {
         DateFormat sdf = new SimpleDateFormat(pattern);
-        sdf.setTimeZone(TimeZone.getTimeZone(Config.get("timezone")));
 
         return sdf;
     }

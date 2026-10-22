@@ -1,10 +1,13 @@
 package org.shedenys.timestamps.model.file.factory.metadata.creator;
 
+import com.drew.lang.annotations.Nullable;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.ExifSubIFDDirectory;
+import org.shedenys.timestamps.Config;
 import org.shedenys.timestamps.model.file.entity.File;
 
 import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * A concrete implementation of the {@link AbstractCreator} class for generating
@@ -20,7 +23,13 @@ public class HeifFileCreator extends AbstractCreator {
      * {@inheritDoc}
      */
     protected Date getFileDate(Metadata metadata) {
-        return getExifDirectory(metadata).getDateOriginal();
+        var directory = getExifDirectory(metadata);
+        var timezone = getTimeZone(directory);
+        if (timezone == null) {
+            throw new RuntimeException("No timezone found");
+        }
+
+        return directory.getDateOriginal(timezone);
     }
 
     /**
@@ -33,7 +42,25 @@ public class HeifFileCreator extends AbstractCreator {
      * @return the first instance of {@link ExifSubIFDDirectory} found within the metadata,
      * or {@code null} if no such directory is present
      */
-    private ExifSubIFDDirectory getExifDirectory(Metadata metadata) {
+    protected ExifSubIFDDirectory getExifDirectory(Metadata metadata) {
         return metadata.getFirstDirectoryOfType(ExifSubIFDDirectory.class);
+    }
+
+    /**
+     * Retrieves the time zone information from the provided EXIF directory.
+     *
+     * @param directory the EXIF directory containing time zone information
+     * @return a {@link TimeZone} instance representing the specified time zone,
+     * or {@code null} if the time zone offset is not present or does not match the expected format
+     */
+    @Nullable
+    protected TimeZone getTimeZone(ExifSubIFDDirectory directory)
+    {
+        String timeOffset = directory.getString(ExifSubIFDDirectory.TAG_TIME_ZONE);
+        if (timeOffset != null && timeOffset.matches("[\\+\\-]\\d\\d:\\d\\d")) {
+            return TimeZone.getTimeZone("GMT" + timeOffset);
+        } else {
+            return null;
+        }
     }
 }

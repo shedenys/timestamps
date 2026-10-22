@@ -1,5 +1,6 @@
 package org.shedenys.timestamps.model.file.factory.metadata.creator;
 
+import com.drew.lang.annotations.Nullable;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.mov.QuickTimeDirectory;
 import org.shedenys.timestamps.model.file.entity.File;
@@ -36,5 +37,18 @@ public class QuickTimeFileCreator extends AbstractCreator {
      */
     private QuickTimeDirectory getQuickTimeDirectory(Metadata metadata) {
         return metadata.getFirstDirectoryOfType(QuickTimeDirectory.class);
+    }
+
+    /**
+     * Retrieves the geographical location information from the provided metadata.
+     * This method is currently not implemented and returns {@code null}.
+     *
+     * @param metadata the metadata containing information extracted from a file,
+     *                 which may include geographical location details
+     * @return {@code null} as this method is not implemented
+     */
+    @Nullable
+    protected Double[] getFileGeoLocation(Metadata metadata) {
+        return null;
     }
 }

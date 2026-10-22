@@ -5,10 +5,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.file.FileTypeDirectory;
 import org.shedenys.timestamps.model.file.entity.File;
 import org.shedenys.timestamps.model.file.factory.FileFactoryInterface;
-import org.shedenys.timestamps.model.file.factory.metadata.creator.AbstractCreator;
-import org.shedenys.timestamps.model.file.factory.metadata.creator.HeifFileCreator;
-import org.shedenys.timestamps.model.file.factory.metadata.creator.JpegFileCreator;
-import org.shedenys.timestamps.model.file.factory.metadata.creator.QuickTimeFileCreator;
+import org.shedenys.timestamps.model.file.factory.metadata.creator.*;
 
 import java.io.InputStream;
 import java.nio.file.Path;
@@ -38,7 +35,8 @@ public class FileFactory implements FileFactoryInterface {
     private static final Map<String, Supplier<AbstractCreator>> creators = Map.of(
             MIME_TYPE_VIDEO_QUICKTIME, QuickTimeFileCreator::new,
             MIME_TYPE_IMAGE_HEIF, HeifFileCreator::new,
-            MIME_TYPE_IMAGE_JPEG, JpegFileCreator::new
+            MIME_TYPE_IMAGE_JPEG, JpegFileCreator::new,
+            MIME_TYPE_IMAGE_TIFF, TiffFileCreator::new
     );
 
     /**

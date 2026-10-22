@@ -1,5 +1,6 @@
 package org.shedenys.timestamps.model.file.factory.metadata.creator;
 
+import com.drew.lang.annotations.Nullable;
 import com.drew.metadata.Metadata;
 import com.drew.metadata.exif.GpsDirectory;
 import org.shedenys.timestamps.model.file.entity.File;
@@ -33,7 +34,7 @@ public abstract class AbstractCreator {
         return new File(
                 path,
                 getFileDate(metadata),
-                getFileGeoLocationString(metadata),
+                getFileGeoLocation(metadata),
                 getFileExtension(path)
         );
     }
@@ -55,7 +56,8 @@ public abstract class AbstractCreator {
      * @return the extracted geographic location as an array of two {@code Double} values representing latitude
      * and longitude, or {@code null} if no valid location is found
      */
-    private Double[] getFileGeoLocationString(Metadata metadata) {
+    @Nullable
+    protected Double[] getFileGeoLocation(Metadata metadata) {
         var geoLocation = getGpsDirectory(metadata).getGeoLocation();
 
         return new Double[]{geoLocation.getLatitude(), geoLocation.getLongitude()};
