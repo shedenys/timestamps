@@ -3,6 +3,7 @@ package org.shedenys.timestamps;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.TimeZone;
 
 /**
  * The Config class is responsible for loading and managing application configuration
@@ -45,6 +46,15 @@ public class Config {
      */
     public static String get(String key) {
         return props.getProperty(key);
+    }
+
+    /**
+     * Retrieves the default time zone for JPEG files based on the "default.jpeg.timezone" property from the configuration.
+     *
+     * @return the default time zone, or UTC if the property is not found or invalid
+     */
+    public static TimeZone getDefaultJpegTimeZone() {
+        return TimeZone.getTimeZone(get("default.jpeg.timezone"));
     }
 }
 
