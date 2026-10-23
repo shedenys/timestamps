@@ -45,9 +45,6 @@ public class MoveFileCommand implements CommandInterface {
         var geoDirName = file.createGeoLocationBasedDirName();
         var dateDirName = file.createTimestampBasedDirName();
 
-        System.out.println("geo: " + geoDirName);
-        System.out.println("date: " + dateDirName);
-
         var baseDir = file.path().getParent();
         var geoDir = baseDir.resolve(geoDirName);
         var dateDir = geoDir.resolve(dateDirName);
